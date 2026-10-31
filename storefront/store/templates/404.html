@@ -1,0 +1,11 @@
+{% extends "store/base.html" %}
+
+{% block title %}Page Not Found &mdash; Storefront{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-4">404</h1>
+    <p class="lead">Sorry, we couldn't find that page.</p>
+    <a href="{% url 'store:home' %}" class="btn btn-primary">Back to Home</a>
+</div>
+{% endblock %}

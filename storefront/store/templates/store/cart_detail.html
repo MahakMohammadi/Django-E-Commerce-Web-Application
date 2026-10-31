@@ -1,0 +1,68 @@
+{% extends "store/base.html" %}
+
+{% block title %}Your Cart &mdash; Storefront{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Your Cart</h1>
+
+{% if items %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Unit Price</th>
+                    <th style="width: 140px;">Quantity</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'store:product_detail' item.product.slug %}" class="text-decoration-none">
+                                {{ item.product.title }}
+                            </a>
+                        </td>
+                        <td>${{ item.product.unit_price }}</td>
+                        <td>
+                            <form method="post" action="{% url 'store:update_cart_item' item.id %}" class="d-flex gap-2">
+                                {% csrf_token %}
+                                <input type="number" name="quantity" min="1" value="{{ item.quantity }}"
+                                       class="form-control form-control-sm" style="width: 5rem;">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">Update</button>
+                            </form>
+                        </td>
+                        <td>${{ item.total_price }}</td>
+                        <td>
+                            <form method="post" action="{% url 'store:remove_from_cart' item.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <div class="card" style="min-width: 300px;">
+            <div class="card-body">
+                <h5 class="card-title">Cart Summary</h5>
+                <p class="d-flex justify-content-between">
+                    <span>Items:</span> <span>{{ cart.total_items }}</span>
+                </p>
+                <p class="d-flex justify-content-between fw-bold">
+                    <span>Total:</span> <span>${{ cart.total_price }}</span>
+                </p>
+                <a href="{% url 'store:checkout' %}" class="btn btn-primary w-100">Proceed to Checkout</a>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <p class="text-muted">Your cart is empty.</p>
+    <a href="{% url 'store:product_list' %}" class="btn btn-primary">Browse Products</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "store/base.html" %}
+
+{% block title %}Server Error &mdash; Storefront{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-4">500</h1>
+    <p class="lead">Something went wrong on our end. Please try again shortly.</p>
+    <a href="{% url 'store:home' %}" class="btn btn-primary">Back to Home</a>
+</div>
+{% endblock %}

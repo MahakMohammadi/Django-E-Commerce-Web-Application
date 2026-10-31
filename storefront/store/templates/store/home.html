@@ -1,0 +1,84 @@
+{% extends "store/base.html" %}
+
+{% block title %}Storefront &mdash; Shop Everything{% endblock %}
+
+{% block content %}
+<div class="p-5 mb-5 rounded-3 text-white" style="background: linear-gradient(135deg, #2c3e50, #4a6785);">
+    <div class="container-fluid py-4">
+        <h1 class="display-5 fw-bold">Welcome to Storefront</h1>
+        <p class="col-md-8 fs-5">
+            Everything you need, all in one place &mdash; electronics, home goods, books, fashion, and more.
+        </p>
+        <form method="get" action="{% url 'store:product_list' %}" class="d-flex gap-2" style="max-width: 500px;">
+            <input class="form-control form-control-lg" type="search" name="q" placeholder="Search for products...">
+            <button class="btn btn-lg btn-warning" type="submit">Search</button>
+        </form>
+        <a href="{% url 'store:product_list' %}" class="btn btn-outline-light mt-3">Browse All Products</a>
+    </div>
+</div>
+
+{% if promotions %}
+<div class="mb-5">
+    <div class="d-flex flex-wrap gap-2">
+        {% for promo in promotions %}
+            <span class="badge rounded-pill text-bg-warning px-3 py-2 fs-6">
+                {{ promo.description }} &mdash; {% widthratio promo.discount 1 100 %}% off
+            </span>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% if featured_products %}
+<section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Featured Products</h2>
+        <a href="{% url 'store:product_list' %}" class="btn btn-sm btn-outline-secondary">View all</a>
+    </div>
+    <div class="row g-3">
+        {% for product in featured_products %}
+            {% include "store/includes/product_card.html" %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if new_arrivals %}
+<section class="mb-5">
+    <h2 class="mb-3">New Arrivals</h2>
+    <div class="row g-3">
+        {% for product in new_arrivals %}
+            {% include "store/includes/product_card.html" %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if best_sellers %}
+<section class="mb-5">
+    <h2 class="mb-3">Best Sellers</h2>
+    <div class="row g-3">
+        {% for product in best_sellers %}
+            {% include "store/includes/product_card.html" %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if collections %}
+<section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Shop by Collection</h2>
+        <a href="{% url 'store:collection_list' %}" class="btn btn-sm btn-outline-secondary">View all</a>
+    </div>
+    <div class="row g-3">
+        {% for collection in collections %}
+            <div class="col-sm-6 col-md-3 mb-3">
+                <a href="{% url 'store:collection_detail' collection.id %}"
+                   class="btn btn-outline-dark w-100 py-3">{{ collection.title }}</a>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}
